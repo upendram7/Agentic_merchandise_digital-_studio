@@ -1,0 +1,16 @@
+[
+  {
+    "name": "margin-protection",
+    "category": "running shoes",
+    "objective": "Improve gross margin without materially reducing unit sales",
+    "store_cluster": "urban-premium",
+    "expected_policy_terms": ["margin", "discount", "approval"]
+  },
+  {
+    "name": "inventory-assortment",
+    "category": "running shoes",
+    "objective": "Reduce long-tail inventory while protecting core sizes",
+    "store_cluster": "urban-premium",
+    "expected_policy_terms": ["inventory", "sizes", "assortment"]
+  }
+]
