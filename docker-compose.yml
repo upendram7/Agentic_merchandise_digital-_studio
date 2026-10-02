@@ -1,0 +1,35 @@
+services:
+  db:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_DB: agentic
+      POSTGRES_USER: agentic
+      POSTGRES_PASSWORD: agentic
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agentic -d agentic"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build: .
+    environment:
+      DATABASE_URL: postgresql+psycopg://agentic:agentic@db:5432/agentic
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-5.6-luna}
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-text-embedding-3-small}
+      LANGCHAIN_TRACING_V2: ${LANGCHAIN_TRACING_V2:-false}
+      LANGCHAIN_PROJECT: ${LANGCHAIN_PROJECT:-agentic-assortment}
+      LANGCHAIN_API_KEY: ${LANGCHAIN_API_KEY:-}
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
