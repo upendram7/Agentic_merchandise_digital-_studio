@@ -130,7 +130,7 @@ python -m app.db.ingest
 uvicorn app.main:app --reload --port 8000
 ```
 
-Open `http://localhost:8000/docs`.
+Open `http://localhost:8000/docs`
 
 ### 7. Submit a decision
 
