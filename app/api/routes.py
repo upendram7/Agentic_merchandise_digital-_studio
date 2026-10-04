@@ -1,12 +1,44 @@
 from uuid import uuid4
 from fastapi import APIRouter, HTTPException
 from langgraph.types import Command
+from openai import APIConnectionError, APIStatusError, AuthenticationError, NotFoundError, RateLimitError
+import httpx
 from app.api.schemas import DecisionRequest, ApprovalRequest, RollbackRequest
+from app.core.config import settings
+from app.core.llm import embeddings
 from app.db.session import SessionLocal
 from app.db.repository import create_decision, create_approval, get_decision, decide_approval, rollback_decision
 from app.graph.workflow import graph
 
 router = APIRouter(prefix="/v1")
+
+@router.get("/agentConfigStatus")
+def agent_config_status():
+    status = {
+        "openai_api_problem": False,
+        "api_key_problem": False,
+        "network_error": False,
+        "embedding_model_problem": False,
+        "rate_limit": 0,
+    }
+    if not settings.openai_api_key:
+        status["openai_api_problem"] = True
+        status["api_key_problem"] = True
+        return status
+
+    try:
+        embeddings().embed_query("agent configuration health check")
+    except Exception as exc:
+        status["openai_api_problem"] = True
+        status["api_key_problem"] = isinstance(exc, AuthenticationError)
+        status["network_error"] = isinstance(exc, (APIConnectionError, httpx.TransportError))
+        status["embedding_model_problem"] = isinstance(exc, NotFoundError)
+        status["rate_limit"] = int(
+            isinstance(exc, RateLimitError)
+            or (isinstance(exc, APIStatusError) and exc.status_code == 429)
+        )
+    return status
+
 
 @router.post("/decisions")
 def create_decision_route(request: DecisionRequest):

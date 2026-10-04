@@ -19,10 +19,7 @@ def vector_search(db, query_vector: list[float], limit: int = 8):
 
 def hybrid_search(db, query: str, query_vector: list[float] | None = None, limit: int = 6):
     lexical = lexical_search(db, query, limit=12)
-    try:
-        vector = vector_search(db, query_vector, limit=12) if query_vector else []
-    except Exception:
-        vector = []
+    vector = vector_search(db, query_vector, limit=12) if query_vector else []
     merged = {}
     for item in lexical:
         merged[item["id"]] = {**item, "score": 0.45 * item.get("lexical_score", 0)}

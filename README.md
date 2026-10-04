@@ -136,6 +136,16 @@ uvicorn app.main:app --reload --port 8000
 
 Open `http://localhost:8000/docs`
 
+### Check agent configuration
+
+The endpoint runs a small embedding request against the configured OpenAI embedding model.
+It returns booleans for API, API key, network, and embedding-model problems, plus `rate_limit`
+as `0` or `1` for the probe:
+
+```bash
+curl http://localhost:8000/v1/agentConfigStatus
+```
+
 ### 7. Submit a decision
 
 ```bash
