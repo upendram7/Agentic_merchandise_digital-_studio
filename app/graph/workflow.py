@@ -1,5 +1,4 @@
 from langgraph.graph import StateGraph, START, END
-from langgraph.checkpoint.memory import MemorySaver
 from langgraph.types import interrupt, Command
 from app.graph.state import DecisionState
 from app.core.llm import embeddings
@@ -7,8 +6,7 @@ from app.rag.retriever import hybrid_search
 from app.tools.business import calculate_promotion_economics, inventory_coverage_days, approval_required
 from app.tools.guardrails import validate_guardrails
 from app.agents import merchandising, promotion, risk, synthesizer
-
-memory = MemorySaver()
+from app.db.checkpointer import checkpointer
 
 
 def retrieve(state: DecisionState):
@@ -17,10 +15,7 @@ def retrieve(state: DecisionState):
     try:
         req = state["request"]
         q = f"{req['category']} {req['objective']} {req['store_cluster']}"
-        try:
-            vector = embeddings().embed_query(q)
-        except Exception:
-            vector = None
+        vector = embeddings().embed_query(q)
         evidence = hybrid_search(db, q, vector, limit=6)
         return {"evidence": evidence}
     finally:
@@ -114,6 +109,6 @@ def build_graph():
     g.add_conditional_edges("approval", route_after_approval, {"persist": "persist", "rejected": "rejected"})
     g.add_edge("persist", END)
     g.add_edge("rejected", END)
-    return g.compile(checkpointer=memory)
+    return g.compile(checkpointer=checkpointer)
 
 graph = build_graph()

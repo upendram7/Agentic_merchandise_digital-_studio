@@ -10,18 +10,28 @@ class PromotionEconomics(BaseModel):
 
 
 def calculate_promotion_economics(list_price: float, cost: float, discount_pct: float, baseline_units: float = 100.0, elasticity: float = 1.4) -> PromotionEconomics:
+    if list_price <= 0:
+        raise ValueError("list_price must be greater than zero")
+    if cost <= 0:
+        raise ValueError("cost must be greater than zero")
+    if not 0 <= discount_pct <= 100:
+        raise ValueError("discount_pct must be between 0 and 100")
+
     baseline_margin = (list_price - cost) / list_price * 100
     price = list_price * (1 - discount_pct / 100)
-    margin = (price - cost) / price * 100
+    if price <= 0:
+        margin = float("-inf")
+    else:
+        margin = (price - cost) / price * 100
     revenue_lift = max(0.0, discount_pct * elasticity)
     margin_delta = margin - baseline_margin
     return PromotionEconomics(
         list_price=list_price,
         cost=cost,
         discount_pct=discount_pct,
-        margin_pct=round(margin, 2),
+        margin_pct=round(margin, 2) if margin != float("-inf") else float("-inf"),
         revenue_lift_pct=round(revenue_lift, 2),
-        margin_delta_pct=round(margin_delta, 2),
+        margin_delta_pct=round(margin_delta, 2) if margin_delta != float("-inf") else float("-inf"),
     )
 
 

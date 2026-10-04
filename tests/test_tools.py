@@ -12,6 +12,13 @@ def test_inventory():
 def test_approval_threshold():
     assert approval_required(15, 10, 20)[0] is True
 
+
+def test_full_discount_does_not_divide_by_zero():
+    result = calculate_promotion_economics(100, 55, 100)
+    assert result.margin_pct == float("-inf")
+    assert result.revenue_lift_pct == 140.0
+
+
 def test_guardrail_failure():
     result = validate_guardrails(25, 20, 25, 20)
     assert not result.passed

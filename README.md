@@ -124,6 +124,10 @@ After seeding, with `OPENAI_API_KEY` configured:
 python -m app.db.ingest
 ```
 
+The API initializes LangGraph's PostgreSQL checkpoint tables during startup. Configure
+`DATABASE_URL` to a persistent PostgreSQL database; approval interrupts are resumed
+from these checkpoints, so in-process memory is not sufficient for serverless deploys.
+
 ### 6. Run API
 
 ```bash
@@ -159,7 +163,7 @@ curl -X POST http://localhost:8000/v1/approvals/<approval_id> \\
 
 Before production:
 
-- replace `MemorySaver` with LangGraph's PostgreSQL checkpointer so graph checkpoints survive process restarts;
+- monitor and size the PostgreSQL connection pool used by LangGraph's PostgreSQL checkpointer;
 - use managed PostgreSQL + pgvector;
 - move secrets to a cloud secret manager;
 - enable OpenTelemetry/LangSmith tracing and PII redaction;
