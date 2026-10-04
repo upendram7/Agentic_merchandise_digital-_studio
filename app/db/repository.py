@@ -26,10 +26,32 @@ def save_result(db, decision_id: str, result: dict, status: str):
 
 def create_approval(db, decision_id: str) -> str:
     aid = new_id("apr")
-    db.add(Approval(id=aid, decision_id=decision_id, status="PENDING"))
-    db.add(AuditEvent(decision_id=decision_id, event_type="APPROVAL_REQUESTED", payload={"approval_id": aid}))
+
+    decision = db.get(DecisionRecord, decision_id)
+    if not decision:
+        raise ValueError("Decision not found")
+
+    decision.status = "PENDING_APPROVAL"
+
+    db.add(
+        Approval(
+            id=aid,
+            decision_id=decision_id,
+            status="PENDING"
+        )
+    )
+
+    db.add(
+        AuditEvent(
+            decision_id=decision_id,
+            event_type="APPROVAL_REQUESTED",
+            payload={"approval_id": aid}
+        )
+    )
+
     db.commit()
     return aid
+
 
 
 def decide_approval(db, approval_id: str, approved: bool, approver: str, comment: str | None):
