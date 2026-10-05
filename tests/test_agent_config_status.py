@@ -1,6 +1,7 @@
 import httpx
 import pytest
 from openai import APIConnectionError, APIStatusError, AuthenticationError, NotFoundError, RateLimitError
+from types import SimpleNamespace
 
 from app.api import routes
 
@@ -19,6 +20,36 @@ def test_agent_config_status_reports_success(monkeypatch):
         "network_error": False,
         "embedding_model_problem": False,
         "rate_limit": 0,
+    }
+
+
+def test_decision_route_includes_pending_approval_id(monkeypatch):
+    class FakeDatabase:
+        def scalars(self, _statement):
+            return self
+
+        def first(self):
+            return SimpleNamespace(id="apr_test")
+
+        def close(self):
+            pass
+
+    db = FakeDatabase()
+    monkeypatch.setattr(routes, "SessionLocal", lambda: db)
+    monkeypatch.setattr(
+        routes,
+        "get_decision",
+        lambda _db, _decision_id: SimpleNamespace(
+            id="dec_test", status="PENDING_APPROVAL", request_json={}, result_json={}
+        ),
+    )
+
+    assert routes.decision_route("dec_test") == {
+        "decision_id": "dec_test",
+        "status": "PENDING_APPROVAL",
+        "request": {},
+        "result": {},
+        "approval_id": "apr_test",
     }
 
 

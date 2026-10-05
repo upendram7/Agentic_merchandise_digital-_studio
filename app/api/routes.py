@@ -1,5 +1,6 @@
 from uuid import uuid4
 from fastapi import APIRouter, HTTPException
+from sqlalchemy import select
 from langgraph.types import Command
 from openai import APIConnectionError, APIStatusError, AuthenticationError, NotFoundError, RateLimitError
 import httpx
@@ -8,6 +9,7 @@ from app.core.config import settings
 from app.core.llm import embeddings
 from app.db.session import SessionLocal
 from app.db.repository import create_decision, create_approval, get_decision, decide_approval, rollback_decision
+from app.db.models import Approval
 from app.graph.workflow import graph
 
 router = APIRouter(prefix="/v1")
@@ -87,7 +89,16 @@ def decision_route(decision_id: str):
         row = get_decision(db, decision_id)
         if not row:
             raise HTTPException(404, "Decision not found")
-        return {"decision_id": row.id, "status": row.status, "request": row.request_json, "result": row.result_json}
+        approval = db.scalars(
+            select(Approval).where(Approval.decision_id == decision_id, Approval.status == "PENDING")
+        ).first()
+        return {
+            "decision_id": row.id,
+            "status": row.status,
+            "request": row.request_json,
+            "result": row.result_json,
+            "approval_id": approval.id if approval else None,
+        }
     finally:
         db.close()
 

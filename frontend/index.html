@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4f5f0" />
+    <title>Merchandise Studio | Decision desk</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Main navigation">
+        <a class="brand" href="/" aria-label="Merchandise Studio home">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span>merchandise<span class="brand-light">studio</span></span>
+        </a>
+
+        <div class="workspace-switcher">
+          <span class="workspace-icon">N</span>
+          <span class="workspace-copy"><strong>Northstar Retail</strong><small>Workspace</small></span>
+          <span class="chevron" aria-hidden="true">⌄</span>
+        </div>
+
+        <p class="nav-label">WORKSPACE</p>
+        <nav class="nav-list">
+          <a class="nav-item active" href="#desk" aria-current="page"><span class="nav-icon">◫</span>Decision desk</a>
+          <a class="nav-item" href="#history"><span class="nav-icon">◷</span>Recent decisions</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <div class="connection-card">
+            <span class="connection-dot" id="connection-dot"></span>
+            <div><strong id="connection-title">Checking services</strong><small id="connection-detail">Connecting to decision engine</small></div>
+          </div>
+          <div class="profile">
+            <span class="avatar">JD</span>
+            <span class="profile-copy"><strong>Jordan Davis</strong><small>Merchandising lead</small></span>
+            <span class="profile-menu" aria-hidden="true">···</span>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main-content" id="desk">
+        <header class="topbar">
+          <div class="breadcrumbs"><span>Workspace</span><span class="crumb-divider">/</span><strong>Decision desk</strong></div>
+          <div class="topbar-right"><span class="today-label" id="today-label"></span><span class="top-avatar">JD</span></div>
+        </header>
+
+        <div class="page-content">
+          <section class="page-heading">
+            <div>
+              <p class="eyebrow"><span class="eyebrow-line"></span>RETAIL INTELLIGENCE</p>
+              <h1>Make the next<br class="mobile-break" /> right move.</h1>
+              <p class="page-subtitle">Turn category signals into clear, defensible commercial decisions.</p>
+            </div>
+            <div class="heading-note"><span class="note-icon">✳</span><span>ASSORTMENT<br />&amp; PROMOTION<br /><strong>DECISION ENGINE</strong></span></div>
+          </section>
+
+          <section class="metric-strip" aria-label="Decision engine capabilities">
+            <div class="metric-item"><span class="metric-number">01</span><span><strong>Merchandising</strong><small>Assortment signals</small></span></div>
+            <span class="metric-join" aria-hidden="true">+</span>
+            <div class="metric-item"><span class="metric-number">02</span><span><strong>Promotion</strong><small>Margin-aware offers</small></span></div>
+            <span class="metric-join" aria-hidden="true">+</span>
+            <div class="metric-item"><span class="metric-number">03</span><span><strong>Risk &amp; policy</strong><small>Guardrail checks</small></span></div>
+            <div class="metric-stamp"><span class="stamp-spark">✳</span>ONE<br />CLEAR<br />CALL</div>
+          </section>
+
+          <div class="desk-grid">
+            <section class="form-panel" aria-labelledby="form-title">
+              <div class="panel-heading">
+                <div><p class="section-kicker">NEW ANALYSIS <span>·</span> ABOUT 2 MIN</p><h2 id="form-title">Set the decision context</h2></div>
+                <span class="step-count">01 <i>/</i> 01</span>
+              </div>
+
+              <form id="decision-form">
+                <div class="form-row two-col">
+                  <label class="field"><span>Category</span><input name="category" required minlength="2" maxlength="120" placeholder="e.g. Running shoes" value="Running shoes" /></label>
+                  <label class="field"><span>Store cluster</span><input name="store_cluster" required minlength="2" maxlength="100" placeholder="e.g. Urban premium" value="Urban premium" /></label>
+                </div>
+                <label class="field objective-field"><span>What are you trying to achieve?</span><textarea name="objective" required minlength="5" maxlength="1000" rows="3" placeholder="Describe the business outcome and any important context.">Improve gross margin without materially reducing unit sales</textarea><small>Clear objectives lead to more useful recommendations.</small></label>
+                <div class="form-row three-col">
+                  <label class="field"><span>Planning horizon</span><span class="input-suffix"><input name="horizon_days" type="number" min="7" max="365" value="30" required /><span>days</span></span></label>
+                  <label class="field"><span>Max discount</span><span class="input-suffix"><input name="max_discount_pct" type="number" min="0" max="100" value="20" step="1" required /><span>%</span></span></label>
+                  <label class="field"><span>Minimum margin</span><span class="input-suffix"><input name="min_margin_pct" type="number" min="0" max="100" value="25" step="1" required /><span>%</span></span></label>
+                </div>
+                <label class="field requested-field"><span>Requested by</span><input name="requested_by" required minlength="2" maxlength="200" value="Jordan Davis" /></label>
+                <div class="form-footer">
+                  <span class="secure-note"><span aria-hidden="true">⌁</span> Evidence-backed · Guardrail checked</span>
+                  <button class="primary-button" type="submit"><span class="button-label">Generate recommendation</span><span class="button-arrow" aria-hidden="true">↗</span></button>
+                </div>
+              </form>
+            </section>
+
+            <aside class="side-column">
+              <section class="signal-panel">
+                <div class="signal-top"><span>DECISION SIGNALS</span><span class="live-indicator"><i></i> LIVE</span></div>
+                <div class="signal-visual" aria-hidden="true">
+                  <div class="signal-orbit orbit-one"></div><div class="signal-orbit orbit-two"></div>
+                  <div class="signal-center"><span>NR</span></div>
+                  <span class="signal-node node-a">M</span><span class="signal-node node-b">P</span><span class="signal-node node-c">R</span>
+                  <span class="signal-cross cross-a">+</span><span class="signal-cross cross-b">+</span>
+                </div>
+                <div class="signal-copy"><h3>More signal.<br />Less guesswork.</h3><p>Three specialist agents combine evidence, economics and policy into one recommendation.</p></div>
+                <div class="signal-footer"><span>HYBRID RETRIEVAL</span><span>●</span><span>DETERMINISTIC TOOLS</span></div>
+              </section>
+
+              <section class="lookup-panel" id="history">
+                <div class="lookup-heading"><div><p class="section-kicker">PICK UP WHERE YOU LEFT OFF</p><h2>Find a decision</h2></div><span class="lookup-icon">↗</span></div>
+                <form id="lookup-form" class="lookup-form"><label for="lookup-id">Decision ID</label><div class="lookup-control"><input id="lookup-id" name="decision_id" placeholder="dec_…" required /><button type="submit" aria-label="Load decision">→</button></div></form>
+                <p class="lookup-hint">Load a saved decision or review an approval.</p>
+              </section>
+            </aside>
+          </div>
+
+          <section class="result-panel" id="result-panel" aria-live="polite" hidden>
+            <div class="result-heading"><div><p class="section-kicker">DECISION OUTPUT</p><h2>Your recommendation</h2></div><span class="status-badge" id="result-status"></span></div>
+            <div class="result-content" id="result-content"></div>
+          </section>
+
+          <footer class="page-footer"><span>MERCHANDISE STUDIO <i>·</i> COMMERCIAL DECISION INTELLIGENCE</span><span>BUILT FOR BETTER CALLS <b>✳</b></span></footer>
+        </div>
+      </main>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

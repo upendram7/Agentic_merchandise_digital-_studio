@@ -134,7 +134,7 @@ from these checkpoints, so in-process memory is not sufficient for serverless de
 uvicorn app.main:app --reload --port 8000
 ```
 
-Open `http://localhost:8000/docs`
+Open `http://localhost:8000` for the decision desk or `http://localhost:8000/docs` for API docs.
 
 ### Check agent configuration
 
